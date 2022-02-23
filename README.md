@@ -15,6 +15,13 @@
 * L'entraînement et l'exploitation sont actuellement fait dans le même script
 * Pour ajouter d'autres images pour l'exploitation, il suffit de les ajouter dans le dossier "input" (maximum 28 images)
 
+# A faire
+- [x] Trouver un sujet et un dataset
+- [x] Réaliser un premier modèle de classification via DeepLearning
+- [ ] Réaliser un second modèle de classification via DeepLearning pour comparer avec le premier
+- [ ] Réaliser un troisième modèle de classification via une IA non basée sur le DeepLearning
+- [ ] Trouver une méthode pour faire une classification sans DeepLearning
+
 # Bibliographie
 ## Tutos utilisés :
 * https://www.tensorflow.org/tutorials/images/classification
