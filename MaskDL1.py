@@ -16,8 +16,8 @@ Définition des variables importantes :
 - La taille des paquets de données envoyés au modèle pour l'entrainement (nombre d'images)
 """
 IMAGE_SHAPE = (224, 224)
-TRAINING_DATA_DIR = './testDL/dataset/train/'
-VALID_DATA_DIR = './testDL/dataset/valid/'
+TRAINING_DATA_DIR = './dataset/train/'
+VALID_DATA_DIR = './dataset/valid/'
 batch_size = 32
 
 # redimensionnement des images
@@ -141,7 +141,7 @@ plt.title('Training and Validation Loss')
 Test du modèle avec d'autres données :
 - Récupération des images pour le test et affichage du nombre d'images
 """
-image_paths = glob.glob('./testDL/input/*.jpg')
+image_paths = glob.glob('./input/*.jpg')
 print(f"Found {len(image_paths)} images...")
 
 for i, image_path in enumerate(image_paths):
