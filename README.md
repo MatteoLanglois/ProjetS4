@@ -22,7 +22,7 @@
 - [ ] Réaliser un second modèle de classification via DeepLearning pour comparer avec le premier
 - [ ] Réaliser un troisième modèle de classification via une IA non basée sur le DeepLearning
 - [ ] Trouver une méthode pour faire une classification sans DeepLearning
-
+- [ ] Faire un programme qui supprimes les images qui ne fonctionnent pas
 # Bibliographie
 ## Tutos utilisés :
 * https://www.tensorflow.org/tutorials/images/classification
