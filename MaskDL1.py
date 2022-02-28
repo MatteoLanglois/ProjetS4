@@ -7,7 +7,6 @@ from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 
-
 """
 Définition des variables importantes :
 - Taille de l'image pour l'entrainement
@@ -105,7 +104,7 @@ model.compile(optimizer='adam',
 model.summary()
 
 # Initialisation de l'entrainement du modèle avec 15 Epochs, la base de validation et d'entrainement
-epochs = 15
+epochs = 1
 history = model.fit(
     train_ds,
     validation_data=val_ds,
@@ -143,6 +142,10 @@ Test du modèle avec d'autres données :
 """
 image_paths = glob.glob('./ProjetS4/input/*.jpg')
 print(f"Found {len(image_paths)} images...")
+plt.figure(figsize=(16, 12))
+
+predictions = {}
+
 
 for i, image_path in enumerate(image_paths):
     # Enregistrement de l'image dans une variable pour garder une version RGB
@@ -157,15 +160,21 @@ for i, image_path in enumerate(image_paths):
     # Création d'un packets de données
     img_array = tf.expand_dims(img_array, 0)
     # Prédiction de la classe de l'image
-    predictions = model.predict(img_array)
+    prediction = model.predict(img_array)
     # Récupération de la classe prédite
-    score = tf.nn.softmax(predictions[0])
+    predictions[i] = [prediction[0], tf.nn.softmax(prediction[0])]
 
-    # Affichage des différentes images ainsi que de la probabilité de prédiction via matplotlib
-    plt.subplot(4, 7, i + 1)
+# Affichage des différentes images ainsi que de la probabilité de prédiction via matplotlib
+for i, image_path in enumerate(image_paths):
+    orig_image = plt.imread(image_path)
+    plt.subplot(4, 10, 2 * i + 1)
     plt.imshow(orig_image)
-    plt.title(f"{class_names[np.argmax(score)]} : {(100 * np.max(score)).round(2)}")
     plt.axis('off')
+    plt.title(f"{class_names[np.argmax(predictions[i][1])]} ({round(np.max(predictions[i][1]) * 100, 2)}%)")
+    plt.subplot(4, 10, 2 * i + 2)
+    plt.bar([1, 2, 3], predictions[i][0])
+
+
 
 # Affichage des différents graphiques matplotlib
 plt.show()
