@@ -18,12 +18,12 @@
 # A faire
 - [x] Trouver un sujet et un dataset
 - [x] Réaliser un premier modèle de classification via DeepLearning
-- [ ] Faire des histogrammes pour chaque images pour voir les différentes classes prédites
-- [ ] Réaliser un second modèle de classification via DeepLearning pour comparer avec le premier
+- [x] Faire des histogrammes pour chaque images pour voir les différentes classes prédites
+- [x] Réaliser un second modèle de classification via DeepLearning pour comparer avec le premier
 - [ ] Réaliser un troisième modèle de classification via une IA non basée sur le DeepLearning
 - [ ] Trouver une méthode pour faire une classification sans DeepLearning
 - [ ] Faire un programme qui supprimes les images qui ne fonctionnent pas
-- [ ] Trouver comment sauvegarder un modèle pour ensuite pour prédire des images dans un autre script
+- [x] Trouver comment sauvegarder un modèle pour ensuite pour prédire des images dans un autre script
 # Bibliographie
 ## Tutos utilisés :
 * https://www.tensorflow.org/tutorials/images/classification
