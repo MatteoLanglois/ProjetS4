@@ -1,9 +1,12 @@
 """Importation des bibliothèques nécessaires"""
 import matplotlib.pyplot as plt
+import numpy as np
 import tensorflow as tf
+import glob as glob
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
+import os
 
 """
 Définition des variables importantes :
@@ -43,8 +46,26 @@ val_ds = tf.keras.utils.image_dataset_from_directory(
 # Enregistrement des noms des classes dans une variable
 class_names = train_ds.class_names
 
+# Optimisation du programme via une API de TensorFlow
+AUTOTUNE = tf.data.AUTOTUNE
+
+# Prétraitement des données d'entrainement pour améliorer les performances
+train_ds = train_ds.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
+val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
+
 # Standardisation des données (réécriture des couleurs de 0 à 1 au lieu de 0 à 255)
 normalization_layer = layers.Rescaling(1. / 255)
+
+"""
+Augmentation des données d'entrainement via des rotations, décalages, zoom, etc réalisés aléatoirement par TensorFlow
+"""
+data_augmentation = keras.Sequential(
+    [
+        layers.RandomFlip("horizontal", input_shape=IMAGE_SHAPE + (3,)),
+        layers.RandomRotation(0.1),
+        layers.RandomZoom(0.1),
+    ]
+)
 
 """
 Définition du modèle de réseau de neurones :
@@ -62,6 +83,7 @@ Définition du modèle de réseau de neurones :
 
 def create_modelClean():
     model = Sequential([
+        data_augmentation,
         layers.Conv2D(16, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
         layers.Dropout(0.2),
@@ -87,12 +109,12 @@ model = create_modelClean()
 model.summary()
 
 # Initialisation de l'entrainement du modèle avec 15 Epochs, la base de validation et d'entrainement
-epochs = 2
+epochs = 1
 history = model.fit(
     train_ds,
     validation_data=val_ds,
     epochs=epochs,
-    verbose=0)
+    verbose=1)
 
 model.save('./ProjetS4/Deeplearning/saved_model/modelBad')
 
