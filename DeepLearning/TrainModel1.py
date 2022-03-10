@@ -118,20 +118,18 @@ model = []
 # model.summary()
 
 # Initialisation de l'entrainement du modèle avec 15 Epochs, la base de validation et d'entrainement
-acc, val_acc, loss, val_loss = [], [], [], []
-# 0, 1, 2 ; 0, 1, 3
 order = [[0, 1, 2]]
 for I in range(len(order)):
     possible_layer = [size_layer[X] for X in order[I]]
     model.append(create_modelClean(possible_layer))
-    epochs = 15
+    epochs = 25
     history = model[I].fit(
         train_ds,
         validation_data=val_ds,
         epochs=epochs,
         verbose=1)
 
-    # model[0].save('./ProjetS4/Deeplearning/saved_model/modelClean')
+    model[0].save('./ProjetS4/Deeplearning/saved_model/modelCleanx')
 
 # Enregistrement des résultats de précisions et de pertes
     acc = history.history['accuracy']
