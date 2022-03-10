@@ -1,4 +1,4 @@
-from cv2 import *
+import cv2
 
 img = cv2.imread('../images/Nana.jpg')
 

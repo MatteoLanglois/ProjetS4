@@ -109,7 +109,7 @@ model = create_modelClean()
 model.summary()
 
 # Initialisation de l'entrainement du modèle avec 15 Epochs, la base de validation et d'entrainement
-epochs = 1
+epochs = 5
 history = model.fit(
     train_ds,
     validation_data=val_ds,

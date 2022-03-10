@@ -5,7 +5,7 @@ from skimage.feature import hog
 from skimage import exposure, data
 import matplotlib.pyplot as plt
 
-image = imread('images/Nana.jpg')
+image = imread('ProjetS4/recherches/images/Nana.jpg')
 
 fd, hog_image = hog(image, orientations=8, pixels_per_cell=(16, 16),
                     cells_per_block=(1, 1), visualize=True, channel_axis=-1)

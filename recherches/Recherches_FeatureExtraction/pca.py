@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from sklearn.datasets import load_digits
 from sklearn.decomposition import PCA
 
-img = cv2.imread('../images/Nana.jpg')
+img = cv2.imread('ProjetS4/recherches/images/Nana.jpg')
 blue, green, red = cv2.split(img)
 
 pca = PCA(200)
