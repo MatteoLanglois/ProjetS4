@@ -1,4 +1,5 @@
 dataset/*
 dataset
-DeepLearning/SaveModel
-DeepLearning/SaveModel/*
+DeepLearning/saved_model
+DeepLearning/saved_model/*
+*.data-00000-of-00001

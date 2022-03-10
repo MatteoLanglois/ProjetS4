@@ -129,7 +129,7 @@ for I in range(len(order)):
         epochs=epochs,
         verbose=1)
 
-    model[0].save('./ProjetS4/Deeplearning/saved_model/modelCleanx')
+    model[0].save('./ProjetS4/Deeplearning/saved_model/modelClean')
 
 # Enregistrement des résultats de précisions et de pertes
     acc = history.history['accuracy']
