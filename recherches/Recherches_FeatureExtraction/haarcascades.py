@@ -8,7 +8,7 @@ imagePath = sys.argv[1]
 cascPath = sys.argv[2]
 
 # Create the haar cascade
-noseCascade = cv2.CascadeClassifier(cascPath)
+noseCascade = cv2.CascadeClassifier("HaarCascade/harr_face_detect_classifier.xml")
 
 # Read the image
 image = cv2.imread("projets4/dataset/test/incorrect_mask/incorrect_mask_1.jpg")
