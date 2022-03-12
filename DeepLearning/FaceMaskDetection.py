@@ -68,7 +68,9 @@ for i, image_path in enumerate(image_paths):
     plt.axis('off')
     plt.title(f"{class_names[np.argmax(predictions[i][1])]} ({round(np.max(predictions[i][1]) * 100, 2)}%)")
     plt.subplot(4, 10, 2 * i + 2)
-    plt.bar([1, 2, 3], predictions[i][0])
+    plt.pie(predictions[i][1].numpy() * 100, colors = ["#37B0B3", "#4453B3", "#BF46F0"])
+
 
 # Affichage des différents graphiques matplotlib
+plt.legend(class_names, loc="center left", bbox_to_anchor=(1, 0.5))
 plt.show()
