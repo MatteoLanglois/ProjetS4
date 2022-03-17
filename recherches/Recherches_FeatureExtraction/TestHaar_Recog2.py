@@ -5,12 +5,14 @@ import dlib
 import cv2
 
 
-def recog(img, gray, detector, predictor):
-    for (imageID, rects) in enumerate(detector):
+def recog(img, detector, predictor):
+    img_gray = [cv2.cvtColor(I, cv2.COLOR_BGR2GRAY) for I in img]
+    img_rects = [detector(I, 1) for I in img]
+    for (imageID, rects) in enumerate(img_rects):
         for (i, rect) in enumerate(rects):
             # déterminer les repères du visage for the face region, then
             # convertir le repère du visage (x, y) en un array NumPy
-            shape = predictor(gray[imageID], rect)
+            shape = predictor(img_gray[imageID], rect)
             shape = face_utils.shape_to_np(shape)
             # convertir le rectangle de Dlib en un cadre de sélection de style OpenCV
             # dessiner le cadre de sélection
@@ -37,16 +39,8 @@ img_with = [imutils.resize(I, width=500) for I in img_with]
 img_without = [imutils.resize(I, width=500) for I in img_without]
 img_incorrect = [imutils.resize(I, width=500) for I in img_incorrect]
 
-img_with_gray = [cv2.cvtColor(I, cv2.COLOR_BGR2GRAY) for I in img_with]
-img_without_gray = [cv2.cvtColor(I, cv2.COLOR_BGR2GRAY) for I in img_without]
-img_incorrect_gray = [cv2.cvtColor(I, cv2.COLOR_BGR2GRAY) for I in img_incorrect]
-
-img_with_rects = [detector(I, 1) for I in img_with_gray]
-img_without_rects = [detector(I, 1) for I in img_without_gray]
-img_incorrect_rects = [detector(I, 1) for I in img_incorrect_gray]
-
-recog(img_with, img_with_gray, img_with_rects, predictor)
-recog(img_without, img_without_gray, img_without_rects, predictor)
-recog(img_incorrect, img_incorrect_gray, img_incorrect_rects, predictor)
+recog(img_with, detector, predictor)
+recog(img_without, detector, predictor)
+recog(img_incorrect, detector, predictor)
 
 plt.show()
