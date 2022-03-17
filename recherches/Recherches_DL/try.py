@@ -15,10 +15,10 @@ models_dict = {
     'resnet50': tf.keras.applications.resnet50.ResNet50(weights='imagenet'),
     'vgg16': tf.keras.applications.vgg16.VGG16(weights='imagenet'),
     'mobilenet': tf.keras.applications.mobilenet_v2.MobileNetV2(weights='imagenet'),
-}
+}s
 print(f"Using {args['model']} model...")
 # get all the image paths
-image_paths = glob.glob('D:/mamac/Documents/Cours/Polytech/Peip2/ProjetS4/testDL/input/*.jpg')
+image_paths = glob.glob('./input/*.jpg')
 print(f"Found {len(image_paths)} images...")
 
 for i, image_path in enumerate(image_paths):

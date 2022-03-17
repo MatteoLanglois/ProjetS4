@@ -4,7 +4,7 @@ import tensorflow as tf
 import numpy as np
 
 IMAGE_SHAPE = (224, 224)
-TRAINING_DATA_DIR = './ProjetS4/dataset/train/'
+TRAINING_DATA_DIR = './dataset/train/'
 
 train_ds = tf.keras.utils.image_dataset_from_directory(
     TRAINING_DATA_DIR,
@@ -16,7 +16,7 @@ train_ds = tf.keras.utils.image_dataset_from_directory(
 
 class_names = train_ds.class_names
 
-model = tf.keras.models.load_model('./ProjetS4/Deeplearning/saved_model/modelClean')
+model = tf.keras.models.load_model('./Deeplearning/saved_model/modelClean')
 
 
 def MaskDetection(frame):

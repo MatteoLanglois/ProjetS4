@@ -18,8 +18,8 @@ Définition des variables importantes :
 - La taille des paquets de données envoyés au modèle pour l'entrainement (nombre d'images)
 """
 IMAGE_SHAPE = (224, 224)
-TRAINING_DATA_DIR = './ProjetS4/dataset/train/'
-VALID_DATA_DIR = './ProjetS4/dataset/valid/'
+TRAINING_DATA_DIR = './dataset/train/'
+VALID_DATA_DIR = './dataset/valid/'
 batch_size = 32
 
 # redimensionnement des images
@@ -115,7 +115,7 @@ model = []
 
 
 # Affichage de toutes les couches du modèle
-# model.summary()
+model.summary()
 
 # Initialisation de l'entrainement du modèle avec 15 Epochs, la base de validation et d'entrainement
 order = [[0, 1, 2]]
@@ -129,7 +129,7 @@ for I in range(len(order)):
         epochs=epochs,
         verbose=1)
 
-    model[0].save('./ProjetS4/Deeplearning/saved_model/modelClean')
+    model[0].save('./Deeplearning/saved_model/modelClean')
 
 # Enregistrement des résultats de précisions et de pertes
     acc = history.history['accuracy']

@@ -1,14 +1,13 @@
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
-from sklearn.datasets import load_digits
 from sklearn.decomposition import PCA
 
 pca = PCA(180)
 
-img_with = [cv2.imread(f'ProjetS4/dataset/train/with_mask/with_mask_{I}.jpg') for I in range(0, 2)]
-img_without = [cv2.imread(f'ProjetS4/dataset/train/without_mask/without_mask_{I}.jpg') for I in range(0, 2)]
-img_incorrect = [cv2.imread(f'ProjetS4/dataset/train/incorrect_mask/incorrect_mask_{I}.jpg') for I in [0, 3]]
+img_with = [cv2.imread(f'./dataset/train/with_mask/with_mask_{I}.jpg') for I in range(0, 2)]
+img_without = [cv2.imread(f'./dataset/train/without_mask/without_mask_{I}.jpg') for I in range(0, 2)]
+img_incorrect = [cv2.imread(f'./dataset/train/incorrect_mask/incorrect_mask_{I}.jpg') for I in [0, 3]]
 
 img_with_edit = []
 img_without_edit = []

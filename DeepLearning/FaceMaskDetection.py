@@ -3,10 +3,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 import glob as glob
-from tensorflow import keras
-from tensorflow.keras import layers
-from tensorflow.keras.models import Sequential
-import os
 import pandas as pd
 import seaborn as sn
 
@@ -17,7 +13,7 @@ Définition des variables importantes :
 - Matrice de confusion
 """
 IMAGE_SHAPE = (224, 224)
-TRAINING_DATA_DIR = './ProjetS4/dataset/train/'
+TRAINING_DATA_DIR = './dataset/train/'
 MatriceConf = {"Y actuel": [], "Y prédiction": []}
 
 # chargement des données d'entrainement (pour récupérer les noms des classes)
@@ -37,9 +33,9 @@ Test du modèle avec d'autres données :
 - Récupération des images pour le test et affichage du nombre d'images
 """
 
-model = tf.keras.models.load_model('./ProjetS4/Deeplearning/saved_model/modelClean')
+model = tf.keras.models.load_model('./Deeplearning/saved_model/modelClean')
 
-image_paths = glob.glob('./ProjetS4/input/*.jpg')
+image_paths = glob.glob('./input/*.jpg')
 print(f"Found {len(image_paths)} images...")
 plt.figure(figsize=(16, 12))
 
@@ -71,9 +67,11 @@ for i, image_path in enumerate(image_paths):
     plt.title(f"{class_names[np.argmax(predictions[i][1])]} ({round(np.max(predictions[i][1]) * 100, 2)}%)")
     plt.subplot(5, 10, 2 * i + 2)
     plt.pie(predictions[i][1].numpy() * 100, colors=["#37B0B3", "#4453B3", "#BF46F0"])
-    nameIMG = image_path.replace("./ProjetS4/input", "")
+    nameIMG = image_path.replace("./input", "")
     MatriceConf["Y actuel"].append(class_names.index(nameIMG[1:-6]))
     MatriceConf["Y prédiction"].append(np.argmax(predictions[i][1]))
+
+plt.legend(class_names, loc="center left", bbox_to_anchor=(1, 0.5))
 
 plt.subplot(5, 10, 35)
 df = pd.DataFrame(MatriceConf, columns=['Y actuel','Y prédiction'])
@@ -93,5 +91,5 @@ plt.text(-0.8, 0.4, f"Précision totale: {accuracy}%", fontsize=20)
 
 
 # Affichage des différents graphiques matplotlib
-plt.legend(class_names, loc="center left", bbox_to_anchor=(1, 0.5))
+
 plt.show()

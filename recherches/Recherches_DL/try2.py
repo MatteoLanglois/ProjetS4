@@ -1,10 +1,7 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
 
-from tensorflow import keras
-
-test_path = './testDL/input/'
+test_path = './input/'
 
 img = tf.keras.utils.load_img(
     test_path, target_size=(img_height, img_width)

@@ -1,12 +1,9 @@
 """Importation des bibliothèques nécessaires"""
 import matplotlib.pyplot as plt
-import numpy as np
 import tensorflow as tf
-import glob as glob
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
-import os
 
 """
 Définition des variables importantes :
@@ -16,8 +13,8 @@ Définition des variables importantes :
 - La taille des paquets de données envoyés au modèle pour l'entrainement (nombre d'images)
 """
 IMAGE_SHAPE = (224, 224)
-TRAINING_DATA_DIR = './ProjetS4/dataset/train/'
-VALID_DATA_DIR = './ProjetS4/dataset/valid/'
+TRAINING_DATA_DIR = './dataset/train/'
+VALID_DATA_DIR = './dataset/valid/'
 batch_size = 32
 
 # redimensionnement des images
@@ -74,7 +71,7 @@ Définition du modèle de réseau de neurones :
 * Le premier avec 16 filtres avec un kernel de taille 3 (?) sans padding et avec une activation de type "relu" 
 (rectified linear unit)
 * Le second est le même mais avec 32 filtres
-* Le derner est le même mais avec 64 filtres
+* Le dernier est le même mais avec 64 filtres
 - Chaque couche a une couche de regroupement maximum (?)
 - Il y a une couche avec 128 neurones
 - Puis enfin une couche avec 4 neurones pour déterminer les classes
@@ -116,7 +113,7 @@ history = model.fit(
     epochs=epochs,
     verbose=1)
 
-model.save('./ProjetS4/Deeplearning/saved_model/modelBad')
+model.save('./Deeplearning/saved_model/modelBad')
 
 # Enregistrement des résultats de précisions et de pertes
 acc = history.history['accuracy']

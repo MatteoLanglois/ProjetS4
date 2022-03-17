@@ -1,9 +1,7 @@
 import tensorflow as tf
 
 # Helper libraries
-import numpy as np
 import matplotlib.pyplot as plt
-import os
 
 gpus = tf.config.experimental.list_physical_devices('GPU')
 tf.config.experimental.set_memory_growth(gpus[0], True)
@@ -12,8 +10,8 @@ config = tf.compat.v1.ConfigProto(gpu_options=tf.compat.v1.GPUOptions(allow_grow
 sess = tf.compat.v1.Session(config=config)
 
 IMAGE_SHAPE = (224, 224)
-TRAINING_DATA_DIR = 'D:/mamac/Documents/Cours/Polytech/Peip2/ProjetS4/testDL/dataset/train/'
-VALID_DATA_DIR = 'D:/mamac/Documents/Cours/Polytech/Peip2/ProjetS4/testDL/dataset/valid/'
+TRAINING_DATA_DIR = './dataset/train/'
+VALID_DATA_DIR = './dataset/valid/'
 
 datagen = tf.keras.preprocessing.image.ImageDataGenerator(
     rescale=1. / 255

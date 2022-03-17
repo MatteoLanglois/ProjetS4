@@ -11,7 +11,7 @@ cascPath = sys.argv[2]
 noseCascade = cv2.CascadeClassifier("HaarCascade/harr_face_detect_classifier.xml")
 
 # Read the image
-image = cv2.imread("projets4/dataset/test/incorrect_mask/incorrect_mask_1.jpg")
+image = cv2.imread("./dataset/test/incorrect_mask/incorrect_mask_1.jpg")
 gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
 # Draw a rectangle around the faces
