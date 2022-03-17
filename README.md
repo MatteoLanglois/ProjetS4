@@ -32,6 +32,8 @@
 - [ ] Trouver comment faire une prédiction pour une image
 ### Autres
 - [ ] Faire un programme qui supprimes les images qui ne fonctionnent pas
+- [x] Créer une environnement virtuel 
+- [ ] Faire en sorte de pouvoir réutiliser l'environnement virtuel (envoyer sur github) + création d'un requirements.txt
 
 # Bibliographie
 ## Tutos utilisés :
