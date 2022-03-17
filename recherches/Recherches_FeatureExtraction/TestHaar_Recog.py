@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import cv2
+import glob
 
 
 def FaceRecog(img, face_cascade, eye_cascade, smile_cascade, profile_face_cascade):
@@ -18,9 +19,10 @@ def FaceRecog(img, face_cascade, eye_cascade, smile_cascade, profile_face_cascad
     return img
 
 
-img_with = [cv2.imread(f'./dataset/train/with_mask/with_mask_{I}.jpg') for I in range(0, 2)]
-img_without = [cv2.imread(f'./dataset/train/without_mask/without_mask_{I}.jpg') for I in range(0, 2)]
-img_incorrect = [cv2.imread(f'./dataset/train/incorrect_mask/incorrect_mask_{I}.jpg') for I in [0, 3]]
+image_paths = glob.glob('./input/*.jpg')
+print(f"Found {len(image_paths)} images...")
+plt.figure(figsize=(16, 12))
+
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
 smile_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_smile.xml")
@@ -31,16 +33,13 @@ img_without_edit = []
 img_incorrect_edit = []
 
 plt.axis("off")
-for I in range(len(img_with)):
-    img_with_edit = FaceRecog(img_with[I], face_cascade, eye_cascade, smile_cascade, profile_face_cascade)
-    img_without_edit = FaceRecog(img_without[I], face_cascade, eye_cascade, smile_cascade, profile_face_cascade)
-    img_incorrect_edit = FaceRecog(img_incorrect[I], face_cascade, eye_cascade, smile_cascade, profile_face_cascade)
+for i, image_path in enumerate(image_paths):
+    orig_image = plt.imread(image_path)
 
-    plt.subplot(3, 3, I + 1)
-    plt.imshow(cv2.cvtColor(img_with[I], cv2.COLOR_RGB2BGR))
-    plt.subplot(3, 3, I + 4)
-    plt.imshow(cv2.cvtColor(img_without[I], cv2.COLOR_RGB2BGR))
-    plt.subplot(3, 3, I + 7)
-    plt.imshow(cv2.cvtColor(img_incorrect[I], cv2.COLOR_RGB2BGR))
+    img = FaceRecog(orig_image, face_cascade, eye_cascade, smile_cascade, profile_face_cascade)
+
+    plt.subplot(5, 10, 2 * i + 1)
+    plt.imshow(img)
+    plt.axis('off')
 
 plt.show()

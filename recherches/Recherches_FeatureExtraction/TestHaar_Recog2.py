@@ -3,44 +3,54 @@ from imutils import face_utils
 import imutils
 import dlib
 import cv2
-
+import glob
 
 def recog(img, detector, predictor):
-    img_gray = [cv2.cvtColor(I, cv2.COLOR_BGR2GRAY) for I in img]
-    img_rects = [detector(I, 1) for I in img]
-    for (imageID, rects) in enumerate(img_rects):
-        for (i, rect) in enumerate(rects):
-            # déterminer les repères du visage for the face region, then
-            # convertir le repère du visage (x, y) en un array NumPy
-            shape = predictor(img_gray[imageID], rect)
-            shape = face_utils.shape_to_np(shape)
-            # convertir le rectangle de Dlib en un cadre de sélection de style OpenCV
-            # dessiner le cadre de sélection
-            (x, y, w, h) = face_utils.rect_to_bb(rect)
-            cv2.rectangle(img[imageID], (x, y), (x + w, y + h), (0, 255, 0), 1)
-            # boucle sur les coordonnées (x, y) pour les repères faciaux
-            # et dessine-les sur l'image
-            for (x, y) in shape:
-                cv2.circle(img[imageID], (x, y), 1, (0, 0, 255), -1)
-        # afficher l'image de sortie avec les détections de visage + repères de visage
-        plt.subplot(1, 2, imageID + 1)
-        cv2.imshow("Output", img[imageID])
+    img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    img_rects = detector(img, 1)
+    for (i, rect) in enumerate(img_rects):
+        # déterminer les repères du visage for the face region, then
+        # convertir le repère du visage (x, y) en un array NumPy
+        shape = predictor(img_gray, rect)
+        shape = face_utils.shape_to_np(shape)
+        left_eye = shape[36:42]
+        right_eye = shape[42:48]
+        nose = shape[27:36]
+        mouth = shape[48:60]
+        # convertir le rectangle de Dlib en un cadre de sélection de style OpenCV
+        # dessiner le cadre de sélection
+        (x, y, w, h) = face_utils.rect_to_bb(rect)
+        cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 1)
+        # boucle sur les coordonnées (x, y) pour les repères faciaux
+        # et dessine-les sur l'image
+        for (x, y) in left_eye:
+            cv2.circle(img, (x, y), 1, (0, 0, 255), -1)
+        for (x, y) in right_eye:
+            cv2.circle(img, (x, y), 1, (0, 0, 255), -1)
+        for (x, y) in nose:
+            cv2.circle(img, (x, y), 1, (255, 0, 0), -1)
+        for (x, y) in mouth:
+            cv2.circle(img, (x, y), 1, (255, 255, 0), -1)
+    # afficher l'image de sortie avec les détections de visage + repères de visage
+    return img
 
 
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor(
     "./recherches/Recherches_FeatureExtraction/data/shape_predictor_68_face_landmarks.dat")
 
-img_with = [cv2.imread(f'./dataset/train/with_mask/with_mask_{I}.jpg') for I in range(0, 2)]
-img_without = [cv2.imread(f'./dataset/train/without_mask/without_mask_{I}.jpg') for I in range(0, 2)]
-img_incorrect = [cv2.imread(f'./dataset/train/incorrect_mask/incorrect_mask_{I}.jpg') for I in [0, 3]]
+image_paths = glob.glob('./input/*.jpg')
+print(f"Found {len(image_paths)} images...")
+plt.figure(figsize=(16, 12))
 
-img_with = [imutils.resize(I, width=500) for I in img_with]
-img_without = [imutils.resize(I, width=500) for I in img_without]
-img_incorrect = [imutils.resize(I, width=500) for I in img_incorrect]
+plt.axis("off")
+for i, image_path in enumerate(image_paths):
+    orig_image = plt.imread(image_path)
 
-recog(img_with, detector, predictor)
-recog(img_without, detector, predictor)
-recog(img_incorrect, detector, predictor)
+    img = recog(orig_image, detector, predictor)
+
+    plt.subplot(5, 10, 2 * i + 1)
+    plt.imshow(img)
+    plt.axis('off')
 
 plt.show()
