@@ -24,13 +24,13 @@ def recog(img, detector, predictor):
         # boucle sur les coordonnées (x, y) pour les repères faciaux
         # et dessine-les sur l'image
         for (x, y) in left_eye:
-            cv2.circle(img, (x, y), 1, (0, 0, 255), -1)
+            cv2.circle(img, (x, y), 3, (0, 0, 255), -1)
         for (x, y) in right_eye:
-            cv2.circle(img, (x, y), 1, (0, 0, 255), -1)
+            cv2.circle(img, (x, y), 3, (0, 0, 255), -1)
         for (x, y) in nose:
-            cv2.circle(img, (x, y), 1, (255, 0, 0), -1)
+            cv2.circle(img, (x, y), 3, (255, 0, 0), -1)
         for (x, y) in mouth:
-            cv2.circle(img, (x, y), 1, (255, 255, 0), -1)
+            cv2.circle(img, (x, y), 3, (255, 255, 0), -1)
     # afficher l'image de sortie avec les détections de visage + repères de visage
     return img
 
@@ -49,7 +49,7 @@ for i, image_path in enumerate(image_paths):
 
     img = recog(orig_image, detector, predictor)
 
-    plt.subplot(5, 10, 2 * i + 1)
+    plt.subplot(3, 5, i + 1)
     plt.imshow(img)
     plt.axis('off')
 
