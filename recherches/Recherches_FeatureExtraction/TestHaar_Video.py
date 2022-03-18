@@ -19,9 +19,9 @@ while True:
         eyes = eye_cascade.detectMultiScale(roi_gray)
         smile = smile_cascade.detectMultiScale(roi_gray)
         print(eyes)
-        for (ex, ey, ew, eh) in eyes:
+        for (ex, ey, ew, eh) in eyes[0:2]:
             cv2.rectangle(roi_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 255), 2)
-        for (sx, sy, sw, sh) in smile:
+        for (sx, sy, sw, sh) in smile[0:1]:
             cv2.rectangle(roi_color, (sx, sy), (sx + sw, sy + sh), (255, 0, 255), 2)
 
     cv2.imshow('img', img)

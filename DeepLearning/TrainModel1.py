@@ -86,14 +86,21 @@ size_layer = [16, 32, 64, 128]
 
 
 def create_modelClean(possible_layer):
-    print(possible_layer)
     model = Sequential([
         data_augmentation,
-        layers.Conv2D(possible_layer[0], 3, padding='same', activation='relu'),
+        layers.Conv2D(16, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
-        layers.Conv2D(possible_layer[0], 3, padding='same', activation='relu'),
+        layers.Conv2D(32, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
-        layers.Conv2D(possible_layer[0], 3, padding='same', activation='relu'),
+        layers.Conv2D(32, 3, padding='same', activation='relu'),
+        layers.MaxPooling2D(),
+        layers.Conv2D(64, 3, padding='same', activation='relu'),
+        layers.MaxPooling2D(),
+        layers.Conv2D(64, 3, padding='same', activation='relu'),
+        layers.MaxPooling2D(),
+        layers.Conv2D(64, 3, padding='same', activation='relu'),
+        layers.MaxPooling2D(),
+        layers.Conv2D(128, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
         layers.Dropout(0.2),
         layers.Flatten(),
@@ -113,16 +120,14 @@ def create_modelClean(possible_layer):
 
 model = []
 
-
-# Affichage de toutes les couches du modèle
-model.summary()
-
 # Initialisation de l'entrainement du modèle avec 15 Epochs, la base de validation et d'entrainement
 order = [[0, 1, 2]]
 for I in range(len(order)):
     possible_layer = [size_layer[X] for X in order[I]]
     model.append(create_modelClean(possible_layer))
-    epochs = 25
+    # Affichage de toutes les couches du modèle
+    model[0].summary()
+    epochs = 15
     history = model[I].fit(
         train_ds,
         validation_data=val_ds,
@@ -153,5 +158,5 @@ for I in range(len(order)):
     plt.plot(epochs_range, loss, label='Training Loss')
     plt.plot(epochs_range, val_loss, label='Validation Loss')
     plt.legend(loc='upper right')
-    plt.title(f'Training and Validation Loss {[size_layer[X] for X in order[I]]}')
+    plt.title(f'Training and Validation Loss')
 plt.show()

@@ -17,10 +17,27 @@ def recog(img, detector, predictor):
         # dessiner le cadre de sélection
         (x, y, w, h) = face_utils.rect_to_bb(rect)
         cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 1)
+        left_eye = shape[36:42]
+        right_eye = shape[42:48]
+        nose = shape[27:36]
+        mouth = shape[48:60]
+        mask = shape[1:16]
+        # convertir le rectangle de Dlib en un cadre de sélection de style OpenCV
+        # dessiner le cadre de sélection
+        (x, y, w, h) = face_utils.rect_to_bb(rect)
+        cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 1)
         # boucle sur les coordonnées (x, y) pour les repères faciaux
         # et dessine-les sur l'image
-        for (x, y) in shape:
-            cv2.circle(img, (x, y), 1, (0, 0, 255), -1)
+        for (x, y) in left_eye:
+            cv2.circle(img, (x, y), 3, (0, 0, 255), -1)
+        for (x, y) in right_eye:
+            cv2.circle(img, (x, y), 3, (0, 0, 255), -1)
+        for (x, y) in nose:
+            cv2.circle(img, (x, y), 3, (255, 0, 0), -1)
+        for (x, y) in mouth:
+            cv2.circle(img, (x, y), 3, (255, 255, 0), -1)
+        for (x, y) in mask:
+            cv2.circle(img, (x, y), 3, (0, 255, 255), -1)
     # afficher l'image de sortie avec les détections de visage + repères de visage
     return img
 

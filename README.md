@@ -12,7 +12,7 @@
 * Cloner le dépôt github
 * via le cmd/terminal/shell aller à la racine du projet
 * Créer l'environnement virtuel (Sous Windows : ```py -m venv env```, Sous une distribution Linux : virtualenv test)
-* Activer l'environnement virtuel Python (Sous windows : ```.\venv\Scripts\activate```, sous une distribution Linux : ```source test/bin/activate```)
+* Activer l'environnement virtuel Python (Sous windows : ```.\env\Scripts\activate```, sous une distribution Linux : ```source test/bin/activate```)
 * Installer les packages nécessaires (```pip install -r requirements.txt```)
 * Télécharger le dataset et mettez le à la racine du projet (https://www.kaggle.com/rjouba/dataset)
 * Exécuter le programme qui vous intéresse
