@@ -1,5 +1,4 @@
 import cv2
-import imutils
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
@@ -21,7 +20,6 @@ def MaskDetection(frame):
     img_array = tf.expand_dims(img_array, 0)
     # Prédiction de la classe de l'image
     prediction = model.predict(img_array)
-    print(prediction)
     # Récupération de la classe prédite
     class_name = class_names[np.argmax(tf.nn.softmax(prediction[0]))]
     return class_name

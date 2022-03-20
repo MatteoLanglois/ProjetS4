@@ -94,9 +94,9 @@ def create_modelClean():
     ])
     '''Compilation du modèle avec l'optimisation "Adam" et la fonction de perte "sparse_categorical_crossentropy", 
     le dernier paramètres permet d'afficher la précision du modèle '''
-    modelc.compile(optimizer='Adam',
-                   loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-                   metrics=['accuracy'])
+    model.compile(optimizer='Adam',
+                  loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                  metrics=['accuracy'])
 
     return modelc
 
