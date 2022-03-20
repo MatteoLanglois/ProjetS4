@@ -1,14 +1,13 @@
 """Importation des bibliothèques nécessaires"""
-import itertools
-
 import matplotlib.pyplot as plt
-import numpy as np
 import tensorflow as tf
-import glob as glob
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
+from keras import losses
+import gc
 import os
+
 
 """
 Définition des variables importantes :
@@ -75,26 +74,18 @@ Définition du modèle de réseau de neurones :
 - Utilisation de la fonction de réseau de neurones "Sequential" qui se compose de trois blocs de convolution :
 * Le premier avec 16 filtres avec un kernel de taille 3 (?) sans padding et avec une activation de type "relu" 
 (rectified linear unit)
-* Le second est le même mais avec 32 filtres
-* Le dernier est le même mais avec 64 filtres
-- Chaque couche a une couche de regroupement maximum (?)
-- Il y a une couche avec 128 neurones
-- Puis enfin une couche avec 4 neurones pour déterminer les classes
+* 
+- Puis enfin une couche avec 3 neurones pour déterminer les classes
 """
 
-size_layer = [16, 32, 64, 128]
 
-
-def create_modelClean(possible_layer):
+def create_modelClean():
     model = Sequential([
         data_augmentation,
+        layers.Dense(16, activation='relu'),
         layers.Conv2D(16, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
         layers.Conv2D(32, 3, padding='same', activation='relu'),
-        layers.MaxPooling2D(),
-        layers.Conv2D(32, 3, padding='same', activation='relu'),
-        layers.MaxPooling2D(),
-        layers.Conv2D(64, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
         layers.Conv2D(64, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
@@ -102,61 +93,56 @@ def create_modelClean(possible_layer):
         layers.MaxPooling2D(),
         layers.Conv2D(128, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
-        layers.Dropout(0.2),
+        layers.Conv2D(128, 3, padding='same', activation='relu'),
+        layers.MaxPooling2D(),
+        layers.Dropout(0.3),
         layers.Flatten(),
         layers.Dense(128, activation='relu'),
         layers.Dense(len(class_names))
     ])
-    '''
-    Compilation du modèle avec l'optimisation "Adam" et la fonction de perte "sparse_categorical_crossentropy", le dernier 
-    paramètres permet d'afficher la précision du modèle
-    '''
-    model.compile(optimizer='adam',
+    '''Compilation du modèle avec l'optimisation "Adam" et la fonction de perte "sparse_categorical_crossentropy", 
+    le dernier paramètres permet d'afficher la précision du modèle '''
+    model.compile(optimizer='Adam',
                   loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                   metrics=['accuracy'])
 
     return model
 
 
-model = []
-
+model = create_modelClean()
+# Affichage de toutes les couches du modèle
+model.summary()
 # Initialisation de l'entrainement du modèle avec 15 Epochs, la base de validation et d'entrainement
-order = [[0, 1, 2]]
-for I in range(len(order)):
-    possible_layer = [size_layer[X] for X in order[I]]
-    model.append(create_modelClean(possible_layer))
-    # Affichage de toutes les couches du modèle
-    model[0].summary()
-    epochs = 15
-    history = model[I].fit(
-        train_ds,
-        validation_data=val_ds,
-        epochs=epochs,
-        verbose=1)
+epochs = 25
+history = model.fit(
+    train_ds,
+    validation_data=val_ds,
+    epochs=epochs,
+    verbose=1)
 
-    model[0].save('./Deeplearning/saved_model/modelClean')
+model.save('./Deeplearning/saved_model/modelClean')
 
 # Enregistrement des résultats de précisions et de pertes
-    acc = history.history['accuracy']
-    val_acc = history.history['val_accuracy']
+acc = history.history['accuracy']
+val_acc = history.history['val_accuracy']
 
-    loss = history.history['loss']
-    val_loss = history.history['val_loss']
+loss = history.history['loss']
+val_loss = history.history['val_loss']
 
-    epochs_range = range(epochs)
-    """
-    Affichage des résultats de précisions et de pertes en fonction des Epochs via MatplotLib
-    """
-    plt.figure(figsize=(8, 8))
-    plt.subplot(1, 2, 1)
-    plt.plot(epochs_range, acc, label='Training Accuracy')
-    plt.plot(epochs_range, val_acc, label='Validation Accuracy')
-    plt.legend(loc='lower right')
-    plt.title(f'Training and Validation Accuracy {[size_layer[X] for X in order[I]]}')
+epochs_range = range(epochs)
+"""
+Affichage des résultats de précisions et de pertes en fonction des Epochs via MatplotLib
+"""
+plt.figure(figsize=(8, 8))
+plt.subplot(1, 2, 1)
+plt.plot(epochs_range, acc, label='Training Accuracy')
+plt.plot(epochs_range, val_acc, label='Validation Accuracy')
+plt.legend(loc='lower right')
+plt.title(f'Training and Validation Accuracy')
 
-    plt.subplot(1, 2, 2)
-    plt.plot(epochs_range, loss, label='Training Loss')
-    plt.plot(epochs_range, val_loss, label='Validation Loss')
-    plt.legend(loc='upper right')
-    plt.title(f'Training and Validation Loss')
+plt.subplot(1, 2, 2)
+plt.plot(epochs_range, loss, label='Training Loss')
+plt.plot(epochs_range, val_loss, label='Validation Loss')
+plt.legend(loc='upper right')
+plt.title(f'Training and Validation Loss')
 plt.show()
