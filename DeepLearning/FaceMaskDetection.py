@@ -18,7 +18,7 @@ Définition des variables importantes :
 """
 IMAGE_SHAPE = (224, 224)
 TRAINING_DATA_DIR = './dataset/train/'
-
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
 # chargement des données d'entrainement (pour récupérer les noms des classes)
 train_ds = tf.keras.utils.image_dataset_from_directory(

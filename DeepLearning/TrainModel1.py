@@ -16,11 +16,7 @@ IMAGE_SHAPE = (224, 224)
 TRAINING_DATA_DIR = './dataset/train/'
 VALID_DATA_DIR = './dataset/valid/'
 batch_size = 32
-
-# redimensionnement des images
-datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-    rescale=1. / 255
-)
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
 # chargement des données d'entrainement
 train_ds = tf.keras.utils.image_dataset_from_directory(
@@ -98,7 +94,7 @@ def create_modelClean():
     ])
     '''Compilation du modèle avec l'optimisation "Adam" et la fonction de perte "sparse_categorical_crossentropy", 
     le dernier paramètres permet d'afficher la précision du modèle '''
-    modelc.compile(optimizer='sgd',
+    modelc.compile(optimizer='Adam',
                    loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                    metrics=['accuracy'])
 
