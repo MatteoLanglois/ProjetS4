@@ -4,10 +4,6 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
-from keras import losses
-import gc
-import os
-
 
 """
 Définition des variables importantes :
@@ -80,7 +76,7 @@ Définition du modèle de réseau de neurones :
 
 
 def create_modelClean():
-    model = Sequential([
+    modelc = Sequential([
         data_augmentation,
         layers.Dense(16, activation='relu'),
         layers.Conv2D(16, 3, padding='same', activation='relu'),
@@ -102,11 +98,11 @@ def create_modelClean():
     ])
     '''Compilation du modèle avec l'optimisation "Adam" et la fonction de perte "sparse_categorical_crossentropy", 
     le dernier paramètres permet d'afficher la précision du modèle '''
-    model.compile(optimizer='Adam',
-                  loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-                  metrics=['accuracy'])
+    modelc.compile(optimizer='sgd',
+                   loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                   metrics=['accuracy'])
 
-    return model
+    return modelc
 
 
 model = create_modelClean()

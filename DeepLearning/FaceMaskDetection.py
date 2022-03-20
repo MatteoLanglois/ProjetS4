@@ -1,10 +1,14 @@
 """Importation des bibliothèques nécessaires"""
 import matplotlib.pyplot as plt
-import numpy as np
 import tensorflow as tf
 import glob as glob
-import pandas as pd
-import seaborn as sn
+from pathlib import Path
+import sys
+
+path_root = Path(__file__).parents[2]
+sys.path.append(str(path_root))
+
+import projets4.utils.show as show
 
 """
 Définition des variables importantes :
@@ -14,7 +18,7 @@ Définition des variables importantes :
 """
 IMAGE_SHAPE = (224, 224)
 TRAINING_DATA_DIR = './dataset/train/'
-MatriceConf = {"Y actuel": [], "Y prédiction": []}
+
 
 # chargement des données d'entrainement (pour récupérer les noms des classes)
 train_ds = tf.keras.utils.image_dataset_from_directory(
@@ -59,37 +63,8 @@ for i, image_path in enumerate(image_paths):
     predictions[i] = [prediction[0], tf.nn.softmax(prediction[0])]
 
 # Affichage des différentes images ainsi que de la probabilité de prédiction via matplotlib
-for i, image_path in enumerate(image_paths):
-    orig_image = plt.imread(image_path)
-    plt.subplot(5, 10, 2 * i + 1)
-    plt.imshow(orig_image)
-    plt.axis('off')
-    plt.title(f"{class_names[np.argmax(predictions[i][1])]} ({round(np.max(predictions[i][1]) * 100, 2)}%)")
-    plt.subplot(5, 10, 2 * i + 2)
-    plt.pie(predictions[i][1].numpy() * 100, colors=["#37B0B3", "#4453B3", "#BF46F0"])
-    nameIMG = image_path.replace("./input", "")
-    MatriceConf["Y actuel"].append(class_names.index(nameIMG[1:-6]))
-    MatriceConf["Y prédiction"].append(np.argmax(predictions[i][1]))
 
-plt.legend(class_names, loc="center left", bbox_to_anchor=(1, 0.5))
-
-plt.subplot(5, 10, 35)
-df = pd.DataFrame(MatriceConf, columns=['Y actuel','Y prédiction'])
-confusion_matrix = pd.crosstab(df['Y actuel'], df['Y prédiction'], rownames=['actuel'], colnames=['prédiction'], margins = True)
-sn.heatmap(confusion_matrix, annot=True)
-
-plt.subplot(5, 10, 36)
-plt.axis("off")
-plt.text(0.2, 0.6, f"0 : {class_names[0]}", fontsize=12)
-plt.text(0.2, 0.3, f"1 : {class_names[1]}", fontsize=12)
-plt.text(0.2, 0, f"2 : {class_names[2]}", fontsize=12)
-
-accuracy = round((confusion_matrix.iloc[0,0] + confusion_matrix.iloc[1,1] + confusion_matrix.iloc[2,2]) / len(image_paths), 3)*100
-plt.subplot(5, 10, 45)
-plt.axis('off')
-plt.text(-0.8, 0.4, f"Précision totale: {accuracy}%", fontsize=20)
-
+show.show(image_paths, predictions, class_names, "DL")
 
 # Affichage des différents graphiques matplotlib
-
 plt.show()
