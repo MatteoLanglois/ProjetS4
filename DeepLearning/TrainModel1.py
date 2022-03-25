@@ -72,7 +72,7 @@ Définition du modèle de réseau de neurones :
 
 
 def create_modelClean():
-    modelc = Sequential([
+    model_c = Sequential([
         data_augmentation,
         layers.Dense(16, activation='relu'),
         layers.Conv2D(16, 3, padding='same', activation='relu'),
@@ -86,6 +86,8 @@ def create_modelClean():
         layers.Conv2D(128, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
         layers.Conv2D(128, 3, padding='same', activation='relu'),
+        layers.BatchNormalization(axis=1),
+        layers.DepthwiseConv2D(3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
         layers.Dropout(0.3),
         layers.Flatten(),
@@ -94,11 +96,11 @@ def create_modelClean():
     ])
     '''Compilation du modèle avec l'optimisation "Adam" et la fonction de perte "sparse_categorical_crossentropy", 
     le dernier paramètres permet d'afficher la précision du modèle '''
-    model.compile(optimizer='Adam',
+    model_c.compile(optimizer='Adam',
                   loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                   metrics=['accuracy'])
 
-    return modelc
+    return model_c
 
 
 model = create_modelClean()
