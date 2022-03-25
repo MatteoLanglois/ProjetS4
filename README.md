@@ -35,6 +35,7 @@
 - [x] Faire des histogrammes pour chaque image pour voir les différentes classes prédites
 - [x] Réaliser un second modèle de classification via DeepLearning pour comparer avec le premier
 - [x] Trouver comment sauvegarder un modèle pour ensuite pour prédire des images dans un autre script
+- [x] Améliorer le réseau neuronal
 ### KNN
 - [ ] Réaliser un troisième modèle de classification via une IA non basée sur le DeepLearning
 - [x] Trouver une méthode pour faire une classification sans DeepLearning

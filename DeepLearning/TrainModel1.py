@@ -52,11 +52,15 @@ normalization_layer = layers.Rescaling(1. / 255)
 """
 Augmentation des données d'entrainement via des rotations, décalages, zoom, etc réalisés aléatoirement par TensorFlow
 """
+IMG_SIZE = 180
 data_augmentation = keras.Sequential(
     [
         layers.RandomFlip("horizontal", input_shape=IMAGE_SHAPE + (3,)),
         layers.RandomRotation(0.1),
         layers.RandomZoom(0.1),
+        layers.Resizing(IMG_SIZE, IMG_SIZE),
+        layers.Rescaling(1./255),
+        layers.RandomContrast((0.2, 1.2))
     ]
 )
 
@@ -79,17 +83,17 @@ def create_modelClean():
         layers.MaxPooling2D(),
         layers.Conv2D(32, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
-        layers.Conv2D(64, 3, padding='same', activation='relu'),
+        layers.Conv2D(32, 3, padding='same', activation='relu'),
+        layers.MaxPooling2D(),
+        layers.Conv2D(32, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
         layers.Conv2D(64, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
-        layers.Conv2D(128, 3, padding='same', activation='relu'),
-        layers.MaxPooling2D(),
-        layers.Conv2D(128, 3, padding='same', activation='relu'),
+        layers.Conv2D(64, 3, padding='same', activation='relu'),
         layers.BatchNormalization(axis=1),
         layers.DepthwiseConv2D(3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
-        layers.Dropout(0.3),
+        layers.Dropout(0.5),
         layers.Flatten(),
         layers.Dense(128, activation='relu'),
         layers.Dense(len(class_names))
@@ -107,7 +111,7 @@ model = create_modelClean()
 # Affichage de toutes les couches du modèle
 model.summary()
 # Initialisation de l'entrainement du modèle avec 15 Epochs, la base de validation et d'entrainement
-epochs = 25
+epochs = 10
 history = model.fit(
     train_ds,
     validation_data=val_ds,
