@@ -59,7 +59,7 @@ data_augmentation = keras.Sequential(
         layers.RandomRotation(0.1),
         layers.RandomZoom(0.1),
         layers.Resizing(IMG_SIZE, IMG_SIZE),
-        layers.Rescaling(1./255),
+        layers.Rescaling(1. / 255),
         layers.RandomContrast((0.2, 1.2))
     ]
 )
@@ -85,11 +85,11 @@ def create_modelClean():
         layers.MaxPooling2D(),
         layers.Conv2D(32, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
-        layers.Conv2D(32, 3, padding='same', activation='relu'),
-        layers.MaxPooling2D(),
         layers.Conv2D(64, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
         layers.Conv2D(64, 3, padding='same', activation='relu'),
+        layers.MaxPooling2D(),
+        layers.Conv2D(128, 3, padding='same', activation='relu'),
         layers.BatchNormalization(axis=1),
         layers.DepthwiseConv2D(3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
@@ -101,8 +101,8 @@ def create_modelClean():
     '''Compilation du modèle avec l'optimisation "Adam" et la fonction de perte "sparse_categorical_crossentropy", 
     le dernier paramètres permet d'afficher la précision du modèle '''
     model_c.compile(optimizer='Adam',
-                  loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-                  metrics=['accuracy'])
+                    loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                    metrics=['accuracy'])
 
     return model_c
 
@@ -111,7 +111,7 @@ model = create_modelClean()
 # Affichage de toutes les couches du modèle
 model.summary()
 # Initialisation de l'entrainement du modèle avec 15 Epochs, la base de validation et d'entrainement
-epochs = 10
+epochs = 30
 history = model.fit(
     train_ds,
     validation_data=val_ds,
