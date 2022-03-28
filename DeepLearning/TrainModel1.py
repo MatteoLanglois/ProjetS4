@@ -60,7 +60,8 @@ data_augmentation = keras.Sequential(
         layers.RandomZoom(0.1),
         layers.Resizing(IMG_SIZE, IMG_SIZE),
         layers.Rescaling(1. / 255),
-        layers.RandomContrast((0.2, 1.2))
+        layers.RandomContrast((0.2, 1.2)),
+
     ]
 )
 
@@ -90,6 +91,7 @@ def create_modelClean():
         layers.Conv2D(64, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
         layers.Conv2D(128, 3, padding='same', activation='relu'),
+        layers.MaxPooling2D(),
         layers.BatchNormalization(axis=1),
         layers.DepthwiseConv2D(3, padding='same', activation='relu'),
         layers.MaxPooling2D(),

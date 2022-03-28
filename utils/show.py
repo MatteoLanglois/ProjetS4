@@ -32,7 +32,7 @@ def show(image_paths, predictions=None, class_names=None, type=None):
         plt.text(0.2, 0.3, f"1 : {class_names[1]}", fontsize=12)
         plt.text(0.2, 0, f"2 : {class_names[2]}", fontsize=12)
 
-        accuracy = round(sum([confusion_matrix.iloc[i, i] for i in range(0, 3)]) / len(image_paths), 3) * 100
+        accuracy = sum([confusion_matrix.iloc[i, i] for i in range(0, 3)]) / len(image_paths) * 100
 
         acc_w = 0
         for i, image_path in enumerate(image_paths):
@@ -45,5 +45,5 @@ def show(image_paths, predictions=None, class_names=None, type=None):
 
         plt.subplot(5, 10, 45)
         plt.axis('off')
-        plt.text(-0.8, 0.4, f"Précision globale: {accuracy}%", fontsize=20)
-        plt.text(-0.8, 0.1, f"Précision pondérée: {accuracy_weighted}%", fontsize=20)
+        plt.text(-0.8, 0.4, f"Précision globale: {round(accuracy, 3)}%", fontsize=20)
+        plt.text(-0.8, 0.1, f"Précision pondérée: {round(accuracy_weighted, 3)}%", fontsize=20)
