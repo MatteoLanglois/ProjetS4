@@ -36,6 +36,7 @@
 - [x] Réaliser un second modèle de classification via DeepLearning pour comparer avec le premier
 - [x] Trouver comment sauvegarder un modèle pour ensuite pour prédire des images dans un autre script
 - [x] Améliorer le réseau neuronal
+- [ ] Lors de l'utilisation de la webcam, rogner les différents viages et prédire pour chacun puis afficher proba + prédiction au-dessus de chaque
 ### KNN
 - [ ] Réaliser un troisième modèle de classification via une IA non basée sur le DeepLearning
 - [x] Trouver une méthode pour faire une classification sans DeepLearning
