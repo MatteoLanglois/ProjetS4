@@ -33,9 +33,15 @@ cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 while True:
     _, img = cam.read()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-    for (x, y, w, h) in faces:
+    detector = dlib.get_frontal_face_detector()
+    predictor = dlib.shape_predictor(
+        "./recherches/Recherches_FeatureExtraction/data/shape_predictor_68_face_landmarks.dat")
+    img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    img_rects = detector(img, 1)
+    for (i, rect) in enumerate(img_rects):
+        shape = predictor(img_gray, rect)
+        shape = face_utils.shape_to_np(shape)
+        (x, y, w, h) = face_utils.rect_to_bb(rect)
         cv2.rectangle(img, (x, y), (x + w, y + h), (255, 255, 0), 2)
         topredict = img[y:y + h, x:x + w]
         predic = MaskDetection(topredict)

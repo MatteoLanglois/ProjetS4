@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 from imutils import face_utils
-import imutils
 import dlib
 import cv2
 import glob
