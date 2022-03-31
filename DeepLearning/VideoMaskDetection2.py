@@ -37,21 +37,20 @@ def MaskDetection(frame):
 # Capture de la vidéo
 cam = cv2.VideoCapture(1, cv2.CAP_DSHOW)
 
+# Récupération des détecteurs pour le visage
+detector = dlib.get_frontal_face_detector()
+predictor = dlib.shape_predictor("./recherches/Recherches_FeatureExtraction/data/shape_predictor_68_face_landmarks.dat")
+
 while True:
     # Récupération de l'image
     _, img = cam.read()
-    # Récupération des détecteurs pour le visage
-    detector = dlib.get_frontal_face_detector()
-    predictor = dlib.shape_predictor(
-        "./recherches/Recherches_FeatureExtraction/data/shape_predictor_68_face_landmarks.dat")
-    # Conversion de l'iamge en niveau de gris
-    img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # Détection des visages
     img_rects = detector(img, 1)
     for (i, rect) in enumerate(img_rects):
         # Prédiction de la position du visage
-        shape = predictor(img_gray, rect)
+        shape = predictor(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), rect)
         shape = face_utils.shape_to_np(shape)
+        print(len(shape))
         (x, y, w, h) = face_utils.rect_to_bb(rect)
         # Dessin du rectangle autour du visage
         cv2.rectangle(img, (x, y), (x + w, y + h), (255, 255, 0), 2)
