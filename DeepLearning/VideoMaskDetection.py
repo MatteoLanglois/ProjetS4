@@ -21,7 +21,7 @@ def MaskDetection(frame):
     # Prédiction de la classe de l'image
     ia_prediction = model.predict(img_array)
     # Récupération de la classe prédite
-    class_Prediction = class_names[np.argmax(tf.nn.softmax(ia_prediction[0]))]
+    class_Prediction = f"{class_names[np.argmax(tf.nn.softmax(ia_prediction[0]))]} : {round(np.max(tf.nn.softmax(ia_prediction[0])) * 100, 1)}%"
 
     return class_Prediction
 
@@ -35,11 +35,10 @@ while True:
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
     for (x, y, w, h) in faces:
         cv2.rectangle(img, (x, y), (x + w, y + h), (255, 255, 0), 2)
-        prediction = MaskDetection(img[y:y + h, x:x + w])
-        cv2.putText(img, prediction if prediction else "IDK", (x, y-5), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+        prediction = MaskDetection(img[y - 10:y + h + 10, x - 10:x + w + 10])
+        cv2.putText(img, prediction, (x, y-5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
     cv2.imshow('Webcam', img)
     if cv2.waitKey(1) == 27:
         break  # esc to quit
 
 cv2.destroyAllWindows()
-plt.show()
