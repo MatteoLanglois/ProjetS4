@@ -17,11 +17,6 @@ TRAINING_DATA_DIR = './dataset/train/'
 VALID_DATA_DIR = './dataset/valid/'
 batch_size = 32
 
-# redimensionnement des images
-datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-    rescale=1. / 255
-)
-
 # chargement des données d'entrainement
 train_ds = tf.keras.utils.image_dataset_from_directory(
     TRAINING_DATA_DIR,
@@ -54,58 +49,43 @@ val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
 normalization_layer = layers.Rescaling(1. / 255)
 
 """
-Augmentation des données d'entrainement via des rotations, décalages, zoom, etc réalisés aléatoirement par TensorFlow
-"""
-data_augmentation = keras.Sequential(
-    [
-        layers.RandomFlip("horizontal", input_shape=IMAGE_SHAPE + (3,)),
-        layers.RandomRotation(0.1),
-        layers.RandomZoom(0.1),
-    ]
-)
-
-"""
 Définition du modèle de réseau de neurones :
-- Utilisation de l'augmentation des données
-- Utilisation de la fonction de réseau de neurones "Sequential" qui se compose de trois blocs de convolution :
-* Le premier avec 16 filtres avec un kernel de taille 3 (?) sans padding et avec une activation de type "relu" 
-(rectified linear unit)
-* Le second est le même mais avec 32 filtres
-* Le dernier est le même mais avec 64 filtres
-- Chaque couche a une couche de regroupement maximum (?)
-- Il y a une couche avec 128 neurones
-- Puis enfin une couche avec 4 neurones pour déterminer les classes
+- Utilisation de la fonction de réseau de neurones "Sequential" qui se compose de plusieurs couches de neurones :
+* La première est une couche dense avec 16 neurones
+* La deuxième est une couche avec 16 neurones convolutifs
+* La troisième est une couche avec 32 neurones convolutifs
+* La quatrième est une couche avec 64 neurones convolutifs
+- Puis enfin une couche avec 3 neurones pour déterminer les classes
 """
 
 
 def create_modelClean():
-    model = Sequential([
-        data_augmentation,
+    model_c = Sequential([
+        layers.Dense(16, activation='relu'),
         layers.Conv2D(16, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
-        layers.Dropout(0.2),
+        layers.Conv2D(32, 3, padding='same', activation='relu'),
+        layers.MaxPooling2D(),
+        layers.Conv2D(64, 3, padding='same', activation='relu'),
+        layers.MaxPooling2D(),
+        layers.Dropout(0.5),
         layers.Flatten(),
-        layers.Dense(128, activation='relu'),
         layers.Dense(len(class_names))
     ])
+    '''Compilation du modèle avec l'optimisation "Adam" et la fonction de perte "sparse_categorical_crossentropy", 
+    le dernier paramètres permet d'améliorer le modèle en fonction de la précision '''
+    model_c.compile(optimizer='Adam',
+                    loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                    metrics=['accuracy'])
 
-    '''
-    Compilation du modèle avec l'optimisation "Adam" et la fonction de perte "sparse_categorical_crossentropy", le dernier 
-    paramètres permet d'afficher la précision du modèle
-    '''
-    model.compile(optimizer='adam',
-                  loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-                  metrics=['accuracy'])
-
-    return model
+    return model_c
 
 
+# Création du modèle
 model = create_modelClean()
-
 # Affichage de toutes les couches du modèle
 model.summary()
-
-# Initialisation de l'entrainement du modèle avec 15 Epochs, la base de validation et d'entrainement
+# Initialisation de l'entrainement du modèle avec 5 Epochs, la base de validation et d'entrainement
 epochs = 5
 history = model.fit(
     train_ds,
@@ -113,7 +93,8 @@ history = model.fit(
     epochs=epochs,
     verbose=1)
 
-model.save('./Deeplearning/saved_model/modelBad')
+# Sauvegarde du modèle
+model.save('./Deeplearning/saved_model/modelClean')
 
 # Enregistrement des résultats de précisions et de pertes
 acc = history.history['accuracy']
@@ -123,21 +104,19 @@ loss = history.history['loss']
 val_loss = history.history['val_loss']
 
 epochs_range = range(epochs)
-
 """
 Affichage des résultats de précisions et de pertes en fonction des Epochs via MatplotLib
 """
-
 plt.figure(figsize=(8, 8))
 plt.subplot(1, 2, 1)
 plt.plot(epochs_range, acc, label='Training Accuracy')
 plt.plot(epochs_range, val_acc, label='Validation Accuracy')
 plt.legend(loc='lower right')
-plt.title('Training and Validation Accuracy')
+plt.title(f'Training and Validation Accuracy')
 
 plt.subplot(1, 2, 2)
 plt.plot(epochs_range, loss, label='Training Loss')
 plt.plot(epochs_range, val_loss, label='Validation Loss')
 plt.legend(loc='upper right')
-plt.title('Training and Validation Loss')
+plt.title(f'Training and Validation Loss')
 plt.show()

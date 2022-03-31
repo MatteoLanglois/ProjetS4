@@ -14,11 +14,9 @@ import projets4.utils.show as show
 Définition des variables importantes :
 - Taille de l'image
 - Chemin vers la base d'entrainement
-- Matrice de confusion
 """
 IMAGE_SHAPE = (224, 224)
 TRAINING_DATA_DIR = './dataset/train/'
-tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
 # chargement des données d'entrainement (pour récupérer les noms des classes)
 train_ds = tf.keras.utils.image_dataset_from_directory(
@@ -34,7 +32,9 @@ class_names = train_ds.class_names
 
 """
 Test du modèle avec d'autres données :
+- Récupération du modèle
 - Récupération des images pour le test et affichage du nombre d'images
+- Création d'un dictionnaire pour sauvegarder les résultats
 """
 
 model = tf.keras.models.load_model('./Deeplearning/saved_model/modelClean')
@@ -45,6 +45,7 @@ plt.figure(figsize=(16, 12))
 
 predictions = {}
 
+# Pour chaque image, on récupère le résultat du modèle
 for i, image_path in enumerate(image_paths):
     # Enregistrement de l'image dans une variable pour garder une version RGB
     orig_image = plt.imread(image_path)
@@ -63,7 +64,6 @@ for i, image_path in enumerate(image_paths):
     predictions[i] = [prediction[0], tf.nn.softmax(prediction[0])]
 
 # Affichage des différentes images ainsi que de la probabilité de prédiction via matplotlib
-
 show.show(image_paths, predictions, class_names, "DL")
 
 # Affichage des différents graphiques matplotlib

@@ -16,7 +16,6 @@ IMAGE_SHAPE = (224, 224)
 TRAINING_DATA_DIR = './dataset/train/'
 VALID_DATA_DIR = './dataset/valid/'
 batch_size = 32
-tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
 # chargement des données d'entrainement
 train_ds = tf.keras.utils.image_dataset_from_directory(
@@ -51,14 +50,21 @@ normalization_layer = layers.Rescaling(1. / 255)
 
 """
 Augmentation des données d'entrainement via des rotations, décalages, zoom, etc réalisés aléatoirement par TensorFlow
+avec : 
+- Mise en miroir aléatoire
+- Rotation aléatoire
+- Zoom aléatoire
+- Changement de la taille de l'image aléatoirement
+- Changement de l'échelle de l'image aléatoirement
+- Changement de la luminosité de l'image aléatoirement
 """
-IMG_SIZE = 180
+IMG_SIZE = (180, 180)
 data_augmentation = keras.Sequential(
     [
         layers.RandomFlip("horizontal", input_shape=IMAGE_SHAPE + (3,)),
-        layers.RandomRotation(0.1),
+        layers.RandomRotation(0.2),
         layers.RandomZoom(0.1),
-        layers.Resizing(IMG_SIZE, IMG_SIZE),
+        layers.Resizing(IMG_SIZE),
         layers.Rescaling(1. / 255),
         layers.RandomContrast((0.2, 1.2)),
 
@@ -68,10 +74,16 @@ data_augmentation = keras.Sequential(
 """
 Définition du modèle de réseau de neurones :
 - Utilisation de l'augmentation des données
-- Utilisation de la fonction de réseau de neurones "Sequential" qui se compose de trois blocs de convolution :
-* Le premier avec 16 filtres avec un kernel de taille 3 (?) sans padding et avec une activation de type "relu" 
-(rectified linear unit)
-* 
+- Utilisation de la fonction de réseau de neurones "Sequential" qui se compose de plusieurs couches de neurones :
+* La première est une couche dense avec 16 neurones
+* La deuxième est une couche avec 16 neurones convolutifs
+* La troisième est une couche avec 32 neurones convolutifs
+* La quatrième est une couche avec 32 neurones convolutifs
+* La cinquième est une couche avec 64 neurones convolutifs
+* La sixième est une couche avec 64 neurones convolutifs
+* La septième est une couche avec 128 neurones convolutifs
+* La huitième est une couche avec 3 neurones de profondeur (?)
+* La neuvième est une couche denses avec 128 neurones
 - Puis enfin une couche avec 3 neurones pour déterminer les classes
 """
 
@@ -101,7 +113,7 @@ def create_modelClean():
         layers.Dense(len(class_names))
     ])
     '''Compilation du modèle avec l'optimisation "Adam" et la fonction de perte "sparse_categorical_crossentropy", 
-    le dernier paramètres permet d'afficher la précision du modèle '''
+    le dernier paramètres permet d'améliorer le modèle en fonction de la précision '''
     model_c.compile(optimizer='Adam',
                     loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                     metrics=['accuracy'])
@@ -109,10 +121,11 @@ def create_modelClean():
     return model_c
 
 
+# Création du modèle
 model = create_modelClean()
 # Affichage de toutes les couches du modèle
 model.summary()
-# Initialisation de l'entrainement du modèle avec 15 Epochs, la base de validation et d'entrainement
+# Initialisation de l'entrainement du modèle avec 30 Epochs, la base de validation et d'entrainement
 epochs = 30
 history = model.fit(
     train_ds,
@@ -120,6 +133,7 @@ history = model.fit(
     epochs=epochs,
     verbose=1)
 
+# Sauvegarde du modèle
 model.save('./Deeplearning/saved_model/modelClean')
 
 # Enregistrement des résultats de précisions et de pertes
