@@ -1,59 +1,60 @@
-# Projet Semestre 4 :
-## Création d'une intelligence artificielle de classification d'images
+# Semester 4 Project:
+## Creation of Artificial Intelligence for image classification
 
 # Introduction
-* IA de détection de masque (Avec, sans ou mal mis)
-* Plusieurs modèles de classification : DeepLearning et une IA non basée sur le DeepLearning
-* Utilisation de la librairie TensorFlow
-* Dans recherches : différentes pistes pour le DL/Feature extraction
-* Ainsi qu'un programme pour vérifier l'utilisation de la carte graphique
+* Mask detection AI (With, without or misplaced)
+* Several classification models: DeepLearning (and a non DeepLearning based AI, not yet finished)
+* Use of the TensorFlow library
+* In research: different tracks for DL/Feature extraction
+* As well as a program to check the use of the graphics card
 
-# Utilisation
-* Cloner le dépôt github
-* via le cmd/terminal/shell aller à la racine du projet
-* Créer l'environnement virtuel (Sous Windows : ```py -m venv env```, Sous une distribution Linux : virtualenv test)
-* Activer l'environnement virtuel Python (Sous windows : ```.\env\Scripts\activate```, sous une distribution Linux : ```source test/bin/activate```)
-* Installer les packages nécessaires (```pip install -r requirements.txt```)
-* Télécharger le dataset et mettez le à la racine du projet (https://www.kaggle.com/rjouba/dataset)
-* Exécuter le programme qui vous intéresse
-## Pour le Deep Learning
-* Entraînez votre modèle via le programme DeepLearning\TrainModel1.py ou DeepLearning\TrainModel2.py
-* Testez votre modèle via le programme DeepLearning\FaceMaskDetection.py ou DeepLearning\VideoMaskDetection.py
-* Changer le programme en fonction du modèle que vous voulez tester
-## Pour les modèles basés sur les K plus proches voisins
-* Pas encore fait
-## Pour les recherches
-* Vous pouvez exécuter les différents programmes tant que l'environnement virtuel est actif
+# Usage
+* Clone the GitHub repository
+* via cmd/terminal/shell go to the root of the project
+* Create the virtual environment (Under Windows: ```py -m venv env```, Under a Linux distribution: virtualenv test)
+* Activate the Python virtual environment (On Windows: ```.\env\Scripts\activate```, on Linux distribution: ```source test/bin/activate``)
+* Install the necessary packages (```pip install -r requirements.txt```)
+* Download the dataset and put it in the root of the project (https://www.kaggle.com/rjouba/dataset)
+* Run the program you are interested in
+## For Deep Learning
+* Train your model via the program DeepLearning\TrainModel1.py or DeepLearning\TrainModel2.py
+* Test your model with the DeepLearning\FaceMaskDetection.py or DeepLearning\VideoMaskDetection.py program
+* Change the program according to the model you want to test
+## For models based on the K nearest neighbors
+* Not done yet
+## For searches
+* You can run the different programs as long as the virtual environment is active
 
 
-# A faire
-### Principal :
-- [x] Trouver un sujet et un dataset
-- [x] Faire des matrices de confusion pour comparer les différents modèles
+# To do
+### Main:
+- [x] Find a subject and a dataset
+- [x] Make confusion matrices to compare the different models
 ### Deep Learning
-- [x] Réaliser un premier modèle de classification via DeepLearning
-- [x] Faire des histogrammes pour chaque image pour voir les différentes classes prédites
-- [x] Réaliser un second modèle de classification via DeepLearning pour comparer avec le premier
-- [x] Trouver comment sauvegarder un modèle pour ensuite pour prédire des images dans un autre script
-- [x] Améliorer le réseau neuronal
-- [ ] Lors de l'utilisation de la webcam, rogner les différents viages et prédire pour chacun puis afficher proba + prédiction au-dessus de chaque
+- [x] Make a first classification model via DeepLearning
+- [x] Make histograms for each image to see the different predicted classes
+- [x] Make a second classification model via DeepLearning to compare with the first one
+- [x] Find out how to save a model to predict images in another script
+- [x] Improve the neural network
+- [x] When using the webcam, crop the different faces and predict for each then display proba + prediction above each
 ### KNN
-- [ ] Réaliser un troisième modèle de classification via une IA non basée sur le DeepLearning
-- [x] Trouver une méthode pour faire une classification sans DeepLearning
-- [ ] Trouver comment avoir un taux de confiance pour la détection des parties du visage
-- [ ] Trouver comment faire une prédiction pour une image
-### Autres
-- [ ] Faire un programme qui supprime les images qui ne fonctionnent pas
-- [x] Créer un environnement virtuel 
-- [x] Faire en sorte de pouvoir réutiliser l'environnement virtuel via la création d'un requirements.txt
+- [ ] Perform a third classification model via non-DeepLearning based AI
+- [ ] Find a way to do a classification without DeepLearning (KNN)
+- [ ] Find a way to have a confidence rate for face part detection
+- [ ] Find how to make a prediction for an image
+### Other
+- [ ] Make a program that removes images that don't work
+- [x] Create a virtual environment 
+- [x] Make it possible to reuse the virtual environment via the creation of a requirements.txt
 
-# Bibliographie
-## Tutos utilisés :
+# Bibliography
+## Tutorials used :
 * https://www.tensorflow.org/tutorials/images/classification
 * https://www.tensorflow.org/tutorials/images/data_augmentation
 * https://www.tensorflow.org/tutorials/quickstart/beginner
 * https://github.com/chandrikadeb7/Face-Mask-Detection
 * https://debuggercafe.com/image-classification-using-tensorflow-on-custom-dataset/
 * https://penseeartificielle.fr/installer-facilement-tensorflow-gpu-sous-windows/
-## DataSet :
+* etc
+## DataSet:
 * https://www.kaggle.com/rjouba/dataset

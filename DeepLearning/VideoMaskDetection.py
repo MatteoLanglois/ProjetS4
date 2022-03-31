@@ -2,8 +2,6 @@ import cv2
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
-import dlib
-from imutils import face_utils
 
 IMAGE_SHAPE = (224, 224)
 TRAINING_DATA_DIR = './dataset/train/'
@@ -21,14 +19,14 @@ def MaskDetection(frame):
     img_array = tf.keras.utils.img_to_array(frame)
     img_array = tf.expand_dims(img_array, 0)
     # Prédiction de la classe de l'image
-    prediction = model.predict(img_array)
+    ia_prediction = model.predict(img_array)
     # Récupération de la classe prédite
-    class_Prediction = class_names[np.argmax(tf.nn.softmax(prediction[0]))]
+    class_Prediction = class_names[np.argmax(tf.nn.softmax(ia_prediction[0]))]
 
     return class_Prediction
 
 
-cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+cam = cv2.VideoCapture(1, cv2.CAP_DSHOW)
 
 while True:
     _, img = cam.read()
@@ -37,9 +35,8 @@ while True:
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
     for (x, y, w, h) in faces:
         cv2.rectangle(img, (x, y), (x + w, y + h), (255, 255, 0), 2)
-        topredict = img[y:y + h, x:x + w]
-        predic = MaskDetection(topredict)
-        cv2.putText(img, predic if predic else "IDK", (x, y-5), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+        prediction = MaskDetection(img[y:y + h, x:x + w])
+        cv2.putText(img, prediction if prediction else "IDK", (x, y-5), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
     cv2.imshow('Webcam', img)
     if cv2.waitKey(1) == 27:
         break  # esc to quit
