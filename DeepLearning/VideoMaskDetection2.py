@@ -51,7 +51,7 @@ def face_detection(frame):
 
 
 # Capture de la vidéo
-cam = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+cam = cv2.VideoCapture(1, cv2.CAP_DSHOW)
 
 # Récupération des détecteurs pour le visage
 detector = dlib.get_frontal_face_detector()

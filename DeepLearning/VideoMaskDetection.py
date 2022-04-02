@@ -46,7 +46,7 @@ while True:
         # Dessin du rectangle autour du visage
         cv2.rectangle(img, (x, y), (x + w, y + h), (255, 255, 0), 2)
         # Prédiction de la classe du visage
-        prediction = MaskDetection(img[y - 10:y + h + 10, x - 10:x + w + 10])
+        prediction = MaskDetection(img[y:y + h, x:x + w])
         # Affichage du résultat
         cv2.putText(img, prediction, (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
     # Affichage de l'image

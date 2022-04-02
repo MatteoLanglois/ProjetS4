@@ -58,13 +58,12 @@ avec :
 - Changement de l'échelle de l'image aléatoirement
 - Changement de la luminosité de l'image aléatoirement
 """
-IMG_SIZE = (180, 180)
 data_augmentation = keras.Sequential(
     [
         layers.RandomFlip("horizontal", input_shape=IMAGE_SHAPE + (3,)),
         layers.RandomRotation(0.2),
         layers.RandomZoom(0.1),
-        layers.Resizing(IMG_SIZE),
+        layers.Resizing(180, 180),
         layers.Rescaling(1. / 255),
         layers.RandomContrast((0.2, 1.2)),
 

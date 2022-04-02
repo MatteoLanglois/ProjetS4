@@ -63,3 +63,4 @@ def show(image_paths, predictions=None, class_names=None, type=None):
         plt.axis('off')
         plt.text(-0.8, 0.4, f"Précision globale: {round(accuracy, 3)}%", fontsize=20)
         plt.text(-0.8, 0.1, f"Précision pondérée: {round(accuracy_weighted, 3)}%", fontsize=20)
+
