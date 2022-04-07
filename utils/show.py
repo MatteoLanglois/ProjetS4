@@ -46,16 +46,15 @@ def show(image_paths, predictions=None, class_names=None, type=None):
         plt.text(0.2, 0, f"2 : {class_names[2]}", fontsize=12)
 
         # Calcul de la précision
-        accuracy = sum([confusion_matrix.iloc[i, i] for i in range(0, 3)]) / len(image_paths) * 100
-
+        accuracy = sum([MatriceConf['Y actuel'][i] == MatriceConf['Y prédiction'][i] for i in range(0, len(image_paths))]) / len(image_paths) * 100
         # Calcul d'une précision pondérée
-        acc_w = 0
+        acc_w = 0 # sum([MatriceConf['Y actuel'][i] == MatriceConf['Y prédiction'][i] for i in range(0, len(image_paths))])
         for i, image_path in enumerate(image_paths):
-            if np.argmax(predictions[i][1]) == class_names.index(image_path[8:-6]):
-                acc_w += 1
-            else:
-                acc_w += predictions[i][1].numpy()[class_names.index(image_path[8:-6])]
+            acc_w += predictions[i][1].numpy()[class_names.index(image_path[8:-6])]
+            #if np.argmax(predictions[i][1]) != class_names.index(image_path[8:-6]):
+                #acc_w += predictions[i][1].numpy()[class_names.index(image_path[8:-6])]
 
+        print(acc_w)
         accuracy_weighted = round(acc_w / len(image_paths), 3) * 100
 
         # Affichage de la précision et de la précision pondérée
