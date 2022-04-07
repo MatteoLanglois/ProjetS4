@@ -5,7 +5,7 @@ import glob as glob
 from pathlib import Path
 import sys
 
-path_root = Path(__file__).parents[2]
+path_root = Path(__file__).parents[3]
 sys.path.append(str(path_root))
 
 import projets4.utils.show as show
