@@ -58,17 +58,6 @@ avec :
 - Changement de l'échelle de l'image aléatoirement
 - Changement de la luminosité de l'image aléatoirement
 """
-data_augmentation = keras.Sequential(
-    [
-        layers.RandomFlip("horizontal", input_shape=IMAGE_SHAPE + (3,)),
-        layers.RandomRotation(0.2),
-        layers.RandomZoom(0.1),
-        layers.Resizing(180, 180),
-        layers.Rescaling(1. / 255),
-        layers.RandomContrast((0.2, 1.2)),
-
-    ]
-)
 
 """
 Définition du modèle de réseau de neurones :
@@ -88,8 +77,7 @@ Définition du modèle de réseau de neurones :
 
 
 def create_modelClean():
-    model_c = Sequential([
-        data_augmentation,
+    model_b = Sequential([
         layers.Dense(16, activation='relu'),
         layers.Conv2D(16, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
@@ -113,11 +101,12 @@ def create_modelClean():
     ])
     '''Compilation du modèle avec l'optimisation "Adam" et la fonction de perte "sparse_categorical_crossentropy", 
     le dernier paramètres permet d'améliorer le modèle en fonction de la précision '''
-    model_c.compile(optimizer='Adam',
+    model_b.compile(optimizer='Adam',
                     loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                     metrics=['accuracy'])
+    model_b.build(input_shape=(None, 224, 224, 3))
 
-    return model_c
+    return model_b
 
 
 # Création du modèle
@@ -125,7 +114,7 @@ model = create_modelClean()
 # Affichage de toutes les couches du modèle
 model.summary()
 # Initialisation de l'entrainement du modèle avec 30 Epochs, la base de validation et d'entrainement
-epochs = 5
+epochs = 30
 history = model.fit(
     train_ds,
     validation_data=val_ds,
