@@ -2,15 +2,10 @@
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import glob as glob
-from pathlib import Path
-import sys
+import numpy as np
+import pandas as pd
+import seaborn as sn
 
-path_root = Path(__file__).parents[3]
-sys.path.append(str(path_root))
-
-print(path_root)
-
-import projets4.utils.show as show
 
 """
 Définition des variables importantes :
@@ -41,13 +36,13 @@ Test du modèle avec d'autres données :
 
 model = tf.keras.models.load_model('./Deeplearning/saved_model/modelClean')
 
-image_paths = glob.glob('./input/*.jpg')
+image_paths = glob.glob('./dataset/test/*/*.jpg')
 print(f"Found {len(image_paths)} images...")
-plt.figure(figsize=(16, 12))
-
 predictions = {}
+MatriceConf = {"Y actuel": [], "Y prédiction": []}
+acc_w = 0
 
-# Pour chaque image, on récupère le résultat du modèle
+
 for i, image_path in enumerate(image_paths):
     # Enregistrement de l'image dans une variable pour garder une version RGB
     orig_image = plt.imread(image_path)
@@ -55,18 +50,41 @@ for i, image_path in enumerate(image_paths):
     img = tf.keras.utils.load_img(
         image_path, target_size=IMAGE_SHAPE
     )
-
     # Transformation de l'image en un tableau de données
     img_array = tf.keras.utils.img_to_array(img)
     # Création d'un packets de données
     img_array = tf.expand_dims(img_array, 0)
     # Prédiction de la classe de l'image
     prediction = model.predict(img_array)
-    # Récupération de la classe prédite
     predictions[i] = [prediction[0], tf.nn.softmax(prediction[0])]
+    # Récupération de la classe prédite
+    if "incorrect" in image_path:
+        MatriceConf["Y actuel"].append(0)
+        acc_w += predictions[i][1].numpy()[0]
+    elif "without" in image_path:
+        MatriceConf["Y actuel"].append(2)
+        acc_w += predictions[i][1].numpy()[2]
+    else:
+        MatriceConf["Y actuel"].append(1)
+        acc_w += predictions[i][1].numpy()[1]
+    MatriceConf["Y prédiction"].append(np.argmax(prediction[0]))
 
-# Affichage des différentes images ainsi que de la probabilité de prédiction via matplotlib
-show.show(image_paths, predictions, class_names, "DL")
+plt.subplot(3, 2, 6)
+plt.axis('off')
+df = pd.DataFrame(MatriceConf, columns=['Y actuel', 'Y prédiction'])
+confusion_matrix = pd.crosstab(df['Y actuel'], df['Y prédiction'], rownames=['actuel'], colnames=['prédiction'],
+                               margins=True)
+sn.heatmap(confusion_matrix, annot=True)
 
-# Affichage des différents graphiques matplotlib
+accuracy = sum([MatriceConf['Y actuel'][i] == MatriceConf['Y prédiction'][i] for i in range(0, len(image_paths))]) / len(image_paths) * 100
+# Calcul d'une précision pondérée
+
+accuracy_weighted = round(acc_w / len(image_paths), 3) * 100
+
+
+plt.subplot(3, 2, 4)
+plt.axis('off')
+plt.text(0, 0.4, f"Précision globale: {round(accuracy, 3)}%", fontsize=20)
+plt.text(-0.8, 0.1, f"Précision pondérée: {round(accuracy_weighted, 3)}%", fontsize=20)
+
 plt.show()
