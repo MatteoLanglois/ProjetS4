@@ -41,7 +41,7 @@ print(f"Found {len(image_paths)} images...")
 predictions = {}
 MatriceConf = {"Y actuel": [], "Y prédiction": []}
 acc_w = 0
-
+acc_theme = {"incorrect_mask": [0, 0, 0], "with_mask": [0, 0, 0], "without_mask": [0, 0, 0]}
 
 for i, image_path in enumerate(image_paths):
     # Enregistrement de l'image dans une variable pour garder une version RGB
@@ -61,15 +61,34 @@ for i, image_path in enumerate(image_paths):
     if "incorrect" in image_path:
         MatriceConf["Y actuel"].append(0)
         acc_w += predictions[i][1].numpy()[0]
+        acc_theme["incorrect_mask"][np.argmax(predictions[i][1])] += 1
     elif "without" in image_path:
         MatriceConf["Y actuel"].append(2)
         acc_w += predictions[i][1].numpy()[2]
+        acc_theme["without_mask"][np.argmax(predictions[i][1])] += 1
     else:
         MatriceConf["Y actuel"].append(1)
         acc_w += predictions[i][1].numpy()[1]
+        acc_theme["with_mask"][np.argmax(predictions[i][1])] += 1
     MatriceConf["Y prédiction"].append(np.argmax(prediction[0]))
 
-plt.subplot(3, 2, 6)
+plt.subplot(2, 3, 1)
+plt.axis('off')
+plt.pie(acc_theme["with_mask"], colors=["#37B0B3", "#4453B3", "#BF46F0"])
+plt.title("With mask")
+
+plt.subplot(2, 3, 2)
+plt.axis('off')
+plt.pie(acc_theme["without_mask"], colors=["#37B0B3", "#4453B3", "#BF46F0"])
+plt.title("Without mask")
+
+plt.subplot(2, 3, 3)
+plt.axis('off')
+plt.pie(acc_theme["incorrect_mask"], colors=["#37B0B3", "#4453B3", "#BF46F0"])
+plt.title("Incorrect mask")
+plt.legend(class_names, loc="lower left")
+
+plt.subplot(2, 3, 6)
 plt.axis('off')
 df = pd.DataFrame(MatriceConf, columns=['Y actuel', 'Y prédiction'])
 confusion_matrix = pd.crosstab(df['Y actuel'], df['Y prédiction'], rownames=['actuel'], colnames=['prédiction'],
@@ -82,9 +101,9 @@ accuracy = sum([MatriceConf['Y actuel'][i] == MatriceConf['Y prédiction'][i] fo
 accuracy_weighted = round(acc_w / len(image_paths), 3) * 100
 
 
-plt.subplot(3, 2, 4)
+plt.subplot(2, 3, 4)
 plt.axis('off')
-plt.text(0, 0.4, f"Précision globale: {round(accuracy, 3)}%", fontsize=20)
-plt.text(-0.8, 0.1, f"Précision pondérée: {round(accuracy_weighted, 3)}%", fontsize=20)
+plt.text(0, 0.4, f"Précision globale: {round(accuracy, 3)}%", fontsize=14)
+plt.text(0, 0.1, f"Précision pondérée: {round(accuracy_weighted, 3)}%", fontsize=14)
 
 plt.show()
