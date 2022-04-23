@@ -61,8 +61,8 @@ avec :
 data_augmentation = keras.Sequential(
     [
         layers.RandomFlip("horizontal", input_shape=IMAGE_SHAPE + (3,)),
-        layers.RandomRotation(0.2),
-        layers.RandomZoom(0.1),
+        layers.RandomRotation(0.3),
+        layers.RandomZoom(0.3),
         layers.Resizing(180, 180),
         layers.Rescaling(1. / 255),
         layers.RandomContrast((0.2, 1.2)),
@@ -90,10 +90,7 @@ Définition du modèle de réseau de neurones :
 def create_modelClean():
     model_c = Sequential([
         data_augmentation,
-        layers.Dense(16, activation='relu'),
         layers.Conv2D(16, 3, padding='same', activation='relu'),
-        layers.MaxPooling2D(),
-        layers.Conv2D(32, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
         layers.Conv2D(32, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
@@ -103,12 +100,13 @@ def create_modelClean():
         layers.MaxPooling2D(),
         layers.Conv2D(128, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
+        layers.Conv2D(256, 3, padding='same', activation='relu'),
+        layers.MaxPooling2D(),
         layers.BatchNormalization(axis=1),
         layers.DepthwiseConv2D(3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
         layers.Dropout(0.5),
         layers.Flatten(),
-        layers.Dense(128, activation='relu'),
         layers.Dense(len(class_names))
     ])
     '''Compilation du modèle avec l'optimisation "Adam" et la fonction de perte "sparse_categorical_crossentropy", 
@@ -125,7 +123,7 @@ model = create_modelClean()
 # Affichage de toutes les couches du modèle
 model.summary()
 # Initialisation de l'entrainement du modèle avec 30 Epochs, la base de validation et d'entrainement
-epochs = 30
+epochs = 60
 history = model.fit(
     train_ds,
     validation_data=val_ds,

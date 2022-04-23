@@ -49,17 +49,6 @@ val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
 normalization_layer = layers.Rescaling(1. / 255)
 
 """
-Augmentation des données d'entrainement via des rotations, décalages, zoom, etc réalisés aléatoirement par TensorFlow
-avec : 
-- Mise en miroir aléatoire
-- Rotation aléatoire
-- Zoom aléatoire
-- Changement de la taille de l'image aléatoirement
-- Changement de l'échelle de l'image aléatoirement
-- Changement de la luminosité de l'image aléatoirement
-"""
-
-"""
 Définition du modèle de réseau de neurones :
 - Utilisation de l'augmentation des données
 - Utilisation de la fonction de réseau de neurones "Sequential" qui se compose de plusieurs couches de neurones :
@@ -77,7 +66,7 @@ Définition du modèle de réseau de neurones :
 
 
 def create_modelClean():
-    model_b = Sequential([
+    model_c = Sequential([
         layers.Dense(16, activation='relu'),
         layers.Conv2D(16, 3, padding='same', activation='relu'),
         layers.MaxPooling2D(),
@@ -101,12 +90,12 @@ def create_modelClean():
     ])
     '''Compilation du modèle avec l'optimisation "Adam" et la fonction de perte "sparse_categorical_crossentropy", 
     le dernier paramètres permet d'améliorer le modèle en fonction de la précision '''
-    model_b.compile(optimizer='Adam',
+    model_c.compile(optimizer='Adam',
                     loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                     metrics=['accuracy'])
-    model_b.build(input_shape=(None, 224, 224, 3))
+    model_c.build(input_shape=(None, 224, 224, 3))
 
-    return model_b
+    return model_c
 
 
 # Création du modèle
@@ -122,7 +111,7 @@ history = model.fit(
     verbose=1)
 
 # Sauvegarde du modèle
-model.save('./Deeplearning/saved_model/modelClean')
+model.save('./Deeplearning/saved_model/modelBad')
 
 # Enregistrement des résultats de précisions et de pertes
 acc = history.history['accuracy']
